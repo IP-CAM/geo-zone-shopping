@@ -31,8 +31,8 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 					}
 
 					if($status){
-
 						$method_name = $method['name'][$this->config->get('config_language_id')];
+						$method_code = strtolower(preg_replace('/[^\da-z]/i', '', $method_name));
 						$method_cost = 0;
 
 						if($method['cost_type'] == 'flat'){
@@ -63,8 +63,8 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 							 $title .= ' (' . $method['instruction'][$this->config->get('config_language_id')].')';
 						}
 
-						$quote_data[$method_name] = array(
-							'code'         => 'geo_zone_shipping.'.$method_name,
+						$quote_data[$method_code] = array(
+							'code'         => 'geo_zone_shipping.'.$method_code,
 							'title'        => $method_name,
 							'cost'         => $method_cost,
 							'tax_class_id' => $method['tax_class_id'],
@@ -90,4 +90,3 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 		return $method_data;
 	}
 }
-
