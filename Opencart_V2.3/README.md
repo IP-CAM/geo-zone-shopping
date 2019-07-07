@@ -1,7 +1,7 @@
 # Multiple Geo Zone Shipping
 
 ## How To Install
-1) In your OpenCart admin panel go to Extensions > Installer
+1) In your OpenCart admin panel go to Extensions > Extension Installer
 2) Upload the file downloaded ocmod.zip file
 3) Go to Extensions > Extensions, choose Shipping from extension type
 4) You will see Geo Zone Shipping module there, click the Install button

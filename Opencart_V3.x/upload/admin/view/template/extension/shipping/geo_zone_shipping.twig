@@ -3,7 +3,7 @@
 <div class="page-header">
 	<div class="container-fluid">
 		<div class="pull-right">
-			<button type="submit" form="form-stripepro" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i
+			<button type="submit" form="form-geo_shipping" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i
 				class="fa fa-save"></i></button>
 			<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a>
 		</div>
@@ -31,7 +31,7 @@
 		<h3 class="panel-title"><i class="fa fa-pencil"></i> {{ text_edit }}</h3>
 	</div>
 	<div class="panel-body">
-		<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-stripepro" class="form-horizontal">
+		<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-geo_shipping" class="form-horizontal">
 			<ul class="nav nav-tabs">
 				<li class="active"><a href="#tab-general" data-toggle="tab">{{ tab_general }}</a></li>
 				<li><a href="#tab-methods" data-toggle="tab">{{ tab_methods }}</a></li>
@@ -55,8 +55,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 control-label" for="shipping_geo_zone_shipping_sort_order">{{ entry_sort_order }}</label>
 						<div class="col-sm-9">
-							<input type="text" name="shipping_geo_zone_shipping_sort_order" value="{{ shipping_geo_zone_shipping_sort_order }}" placeholder="{{ entry_sort_order }}"
-								id="shipping_geo_zone_shipping_sort_order" class="form-control" />
+							<input type="text" name="shipping_geo_zone_shipping_sort_order" value="{{ shipping_geo_zone_shipping_sort_order }}" placeholder="{{ entry_sort_order }}" id="shipping_geo_zone_shipping_sort_order" class="form-control" />
 						</div>
 					</div>
 					<div class="row-fluid">
@@ -124,7 +123,7 @@
 										<label class="control-label">
 											<span data-toggle="tooltip" title="{{ entry_total_help }}">{{ entry_total }}</span>
 										</label>
-										<input type="number" name="shipping_geo_zone_shipping_methods[{{ row }}][total]" value="{{ method.total }}" placeholder="{{ entry_total }}" class="form-control"  min="0"/>
+										<input type="number" step=".01" name="shipping_geo_zone_shipping_methods[{{ row }}][total]" value="{{ method.total }}" placeholder="{{ entry_total }}" class="form-control"  min="0"/>
 										{% if error_method[row]['total'] %}
 										<div class="text-danger">{{ error_method[row]['total'] }}</div>
 										{% endif %}
@@ -150,37 +149,61 @@
 									<div class="form-group col-sm-12 required">
 										<label class="control-label">{{ entry_cost_type }}</label>
 										<select name="shipping_geo_zone_shipping_methods[{{ row }}][cost_type]" class="form-control cost_type">
-											{% if method.cost_type == 'weight' %}
-											<option value="flat">{{ entry_flat_cost }}</option>
-											<option value="weight" selected="selected">{{ entry_weight_cost }}</option>
-											{% else %}
-											<option value="flat" selected="selected">{{ entry_flat_cost }}</option>
-											<option value="weight">{{ entry_weight_cost }}</option>
-											{% endif %}
+											<option value="flat" {% if method.cost_type == 'flat' %}selected{% endif %}>{{ entry_flat_cost }}</option>
+											<option value="price" {% if method.cost_type == 'price' %}selected{% endif %}>{{ entry_price_cost }}</option>
+											<option value="weight" {% if method.cost_type == 'weight' %}selected{% endif %}>{{ entry_weight_cost }}</option>
 										</select>
 										{% if error_method[row]['cost_type'] %}
 										<div class="text-danger">{{ error_method[row]['cost_type'] }}</div>
 										{% endif %}
 									</div>
-									<div class="form-group col-sm-12 required _flat" {% if method.cost_type == 'weight' %}style="display: none;"{% endif %}>
+
+									{# Flat Cost Shipping #}
+									<div class="form-group col-sm-12 required _flat" {% if method.cost_type != 'flat' %}style="display: none;"{% endif %}>
 										<label class="control-label">
 											<span data-toggle="tooltip" title="{{ entry_flat_cost_help }}">{{ entry_flat_cost }}</span>
 										</label>
-										<input type="number" name="shipping_geo_zone_shipping_methods[{{ row }}][flat_cost]" value="{{ method.flat_cost }}" placeholder="{{ entry_flat_cost }}" class="form-control" min="0" />
+										<input type="number" step=".01" name="shipping_geo_zone_shipping_methods[{{ row }}][flat_cost]" value="{{ method.flat_cost }}" placeholder="{{ entry_flat_cost }}" class="form-control" min="0" />
 										{% if error_method[row]['flat_cost'] %}
 										<div class="text-danger">{{ error_method[row]['flat_cost'] }}</div>
 										{% endif %}
 									</div>
-									<div class="form-group col-sm-12 required _weight" {% if method.cost_type == 'flat' %}style="display: none;"{% endif %}>
+									{# Flat Cost Shipping #}
+
+
+									{# Total Based Shipping #}
+									<div class="form-group col-sm-12 required _price" {% if method.cost_type != 'price' %}style="display: none;"{% endif %}>
+										<label class="control-label">
+											<span data-toggle="tooltip" title="{{ entry_price_help }}">{{ entry_price }}</span>
+										</label>
+										<input type="number" step=".01" name="shipping_geo_zone_shipping_methods[{{ row }}][price]" value="{{ method.price }}" placeholder="{{ entry_price }}" class="form-control" min="0" />
+										{% if error_method[row]['price'] %}
+										<div class="text-danger">{{ error_method[row]['price'] }}</div>
+										{% endif %}
+									</div>
+									<div class="form-group col-sm-12 required _orice" {% if method.cost_type != 'price' %}style="display: none;"{% endif %}>
+										<label class="control-label">
+											<span data-toggle="tooltip" title="{{ entry_price_cost_help2 }}">{{ entry_price_cost }}</span>
+										</label>
+										<input type="text" name="shipping_geo_zone_shipping_methods[{{ row }}][price_cost]" value="{{ method.price_cost }}" placeholder="{{ entry_price_cost_help1 }}" class="form-control" min="0" />
+										{% if error_method[row]['price_cost'] %}
+										<div class="text-danger">{{ error_method[row]['price_cost'] }}</div>
+										{% endif %}
+									</div>
+									{# Total Based Shipping #}
+
+
+									{# Weight Based Shipping #}
+									<div class="form-group col-sm-12 required _weight" {% if method.cost_type != 'weight' %}style="display: none;"{% endif %}>
 										<label class="control-label">
 											<span data-toggle="tooltip" title="{{ entry_weight_help }}">{{ entry_weight }}</span>
 										</label>
-										<input type="number" name="shipping_geo_zone_shipping_methods[{{ row }}][weight]" value="{{ method.weight }}" placeholder="{{ entry_weight }}" class="form-control" min="0" />
+										<input type="number" step=".01" name="shipping_geo_zone_shipping_methods[{{ row }}][weight]" value="{{ method.weight }}" placeholder="{{ entry_weight }}" class="form-control" min="0" />
 										{% if error_method[row]['weight'] %}
 										<div class="text-danger">{{ error_method[row]['weight'] }}</div>
 										{% endif %}
 									</div>
-									<div class="form-group col-sm-12 required _weight" {% if method.cost_type == 'flat' %}style="display: none;"{% endif %}>
+									<div class="form-group col-sm-12 required _weight" {% if method.cost_type != 'weight' %}style="display: none;"{% endif %}>
 										<label class="control-label">
 											<span data-toggle="tooltip" title="{{ entry_weight_cost_help2 }}">{{ entry_weight_cost }}</span>
 										</label>
@@ -189,9 +212,12 @@
 										<div class="text-danger">{{ error_method[row]['weight_cost'] }}</div>
 										{% endif %}
 									</div>
+									{# Weight Based Shipping #}
+
 									<div class="form-group col-sm-12 required">
 										<label class="control-label">{{ entry_tax_class }}</label>
 										<select name="shipping_geo_zone_shipping_methods[{{ row }}][tax_class_id]" class="form-control">
+											<option value="">{{ entry_no_tax_class }}</option>
 											{% for tax_class in tax_classes %}
 											{% if tax_class.tax_class_id == method.tax_class_id %}
 											<option value="{{ tax_class.tax_class_id }}" selected="selected">{{ tax_class.title }}</option>
@@ -234,12 +260,15 @@
 	});
 
 	$(document).on('change', 'select.cost_type', function(){
-		if($(this).val() == 'flat'){
-			$('._weight', $(this).parents('tr')).hide();
-			$('._flat', $(this).parents('tr')).show();
-		} else {
+		$('._flat', $(this).parents('tr')).hide();
+		$('._price', $(this).parents('tr')).hide();
+		$('._weight', $(this).parents('tr')).hide();
+		if($(this).val() == 'price'){
+			$('._price', $(this).parents('tr')).show();
+		} else if($(this).val() == 'weight'){
 			$('._weight', $(this).parents('tr')).show();
-			$('._flat', $(this).parents('tr')).hide();
+		} else {
+			$('._flat', $(this).parents('tr')).show();
 		}
 	});
 	
@@ -270,7 +299,7 @@
 			+						'<span class="input-group-addon">'
 			+							'<img src="language/{{ language.code }}/{{ language.code }}.png" title="{{ language.name }}" />'
 			+						'</span>'
-			+						'<textarea name="shipping_geo_zone_shipping_methods['+row+'][instruction][{{ language.language_id }}]" rows="5" placeholder="{{ entry_instruction }}" class="form-control">{{ method.instruction[language.language_id] }}</textarea>'
+			+						'<textarea name="shipping_geo_zone_shipping_methods['+row+'][instruction][{{ language.language_id }}]" rows="5" placeholder="{{ entry_instruction }}" class="form-control"></textarea>'
 			+					'</div>';
 								{% endfor %}
 		html +=			'</div>'
@@ -287,7 +316,7 @@
 			+					'<label class="control-label">'
 			+						'<span data-toggle="tooltip" title="{{ entry_total_help }}">{{ entry_total }}</span>'
 			+					'</label>'
-			+					'<input type="number" name="shipping_geo_zone_shipping_methods['+row+'][total]" value="" placeholder="{{ entry_total }}" class="form-control"  min="0"/>'
+			+					'<input type="number" step=".01" name="shipping_geo_zone_shipping_methods['+row+'][total]" value="" placeholder="{{ entry_total }}" class="form-control"  min="0"/>'
 			+				'</div>'
 			+				'<div class="form-group col-sm-12 required">'
 			+					'<label class="control-label">{{ entry_geo_zone }}</label>'
@@ -304,15 +333,34 @@
 			+					'<label class="control-label">{{ entry_cost_type }}</label>'
 			+					'<select name="shipping_geo_zone_shipping_methods['+row+'][cost_type]" class="form-control cost_type">'
 			+						'<option value="flat" selected="selected">{{ entry_flat_cost }}</option>'
+			+						'<option value="price">{{ entry_price_cost }}</option>'
 			+						'<option value="weight">{{ entry_weight_cost }}</option>'
 			+					'</select>'
 			+				'</div>'
+
+
 			+				'<div class="form-group col-sm-12 required _flat">'
 			+					'<label class="control-label">'
 			+						'<span data-toggle="tooltip" title="{{ entry_flat_cost_help }}">{{ entry_flat_cost }}</span>'
 			+					'</label>'
-			+					'<input type="number" name="shipping_geo_zone_shipping_methods['+row+'][flat_cost]" value="" placeholder="{{ entry_flat_cost }}" class="form-control" min="0" />'
+			+					'<input type="number" step=".01" name="shipping_geo_zone_shipping_methods['+row+'][flat_cost]" value="" placeholder="{{ entry_flat_cost }}" class="form-control" min="0" />'
 			+				'</div>'
+
+
+			+				'<div class="form-group col-sm-12 required _price" style="display: none;">'
+			+					'<label class="control-label">'
+			+						'<span data-toggle="tooltip" title="{{ entry_price_help }}">{{ entry_price }}</span>'
+			+					'</label>'
+			+					'<input type="text" name="shipping_geo_zone_shipping_methods['+row+'][price]" value="" placeholder="{{ entry_price }}" class="form-control" min="0" />'
+			+				'</div>'
+			+				'<div class="form-group col-sm-12 required _price" style="display: none;">'
+			+					'<label class="control-label">'
+			+						'<span data-toggle="tooltip" title="{{ entry_price_cost_help2 }}">{{ entry_price_cost }}</span>'
+			+					'</label>'
+			+					'<input type="text" name="shipping_geo_zone_shipping_methods['+row+'][price_cost]" value="" placeholder="{{ entry_price_cost_help1 }}" class="form-control" min="0" />'
+			+				'</div>'
+
+
 			+				'<div class="form-group col-sm-12 required _weight" style="display: none;">'
 			+					'<label class="control-label">'
 			+						'<span data-toggle="tooltip" title="{{ entry_weight_help }}">{{ entry_weight }}</span>'
@@ -327,7 +375,8 @@
 			+				'</div>'
 			+				'<div class="form-group col-sm-12 required">'
 			+					'<label class="control-label">{{ entry_tax_class }}</label>'
-			+					'<select name="shipping_geo_zone_shipping_methods['+row+'][tax_class_id]" class="form-control">';
+			+					'<select name="shipping_geo_zone_shipping_methods['+row+'][tax_class_id]" class="form-control">'
+			+						'<option value="">{{ entry_no_tax_class }}</option>';
 									{% for tax_class in tax_classes %}
 		html +=					'<option value="{{ tax_class.tax_class_id }}">{{ tax_class.title }}</option>';
 									{% endfor %}

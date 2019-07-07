@@ -5,18 +5,19 @@ class ControllerExtensionShippingGeoZoneShipping extends Controller {
 
 	public function index(){
 
-		$this->load->language('extension/shipping/geo_zone_shipping');
+		// load all language variables
+		$data = $this->load->language('extension/shipping/geo_zone_shipping');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('shipping_geo_zone_shipping', $this->request->post);
+			$this->model_setting_setting->editSetting('geo_zone_shipping', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('extension/shipping/geo_zone_shipping', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true));
+			$this->response->redirect($this->url->link('extension/shipping/geo_zone_shipping', 'token=' . $this->session->data['token'] . '&type=shipping', true));
 		}
 
 
@@ -34,46 +35,46 @@ class ControllerExtensionShippingGeoZoneShipping extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'token=' . $this->session->data['token'], true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true)
+			'href' => $this->url->link('marketplace/extension', 'token=' . $this->session->data['token'] . '&type=shipping', true)
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/shipping/geo_zone_shipping', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('extension/shipping/geo_zone_shipping', 'token=' . $this->session->data['token'], true)
 		);
 
-		$data['action'] = $this->url->link('extension/shipping/geo_zone_shipping', 'user_token=' . $this->session->data['user_token'], true);
+		$data['action'] = $this->url->link('extension/shipping/geo_zone_shipping', 'token=' . $this->session->data['token'], true);
 
-		$data['cancel'] = $this->url->link('extension/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true);
+		$data['cancel'] = $this->url->link('extension/extension', 'token=' . $this->session->data['token'] . '&type=shipping', true);
 
 
-		if (isset($this->request->post['shipping_geo_zone_shipping_status'])) {
-			$data['shipping_geo_zone_shipping_status'] = $this->request->post['shipping_geo_zone_shipping_status'];
-		} else if($this->config->has('shipping_geo_zone_shipping_status')){
-			$data['shipping_geo_zone_shipping_status'] = (int)$this->config->get('shipping_geo_zone_shipping_status');
+		if (isset($this->request->post['geo_zone_shipping_status'])) {
+			$data['geo_zone_shipping_status'] = $this->request->post['geo_zone_shipping_status'];
+		} else if($this->config->has('geo_zone_shipping_status')){
+			$data['geo_zone_shipping_status'] = (int)$this->config->get('geo_zone_shipping_status');
 		} else {
-			$data['shipping_geo_zone_shipping_status'] = 0;
+			$data['geo_zone_shipping_status'] = 0;
 		}
 
-		if (isset($this->request->post['shipping_geo_zone_shipping_sort_order'])) {
-			$data['shipping_geo_zone_shipping_sort_order'] = $this->request->post['shipping_geo_zone_shipping_sort_order'];
-		} else if($this->config->has('shipping_geo_zone_shipping_sort_order')){
-			$data['shipping_geo_zone_shipping_sort_order'] = (int)$this->config->get('shipping_geo_zone_shipping_sort_order');
+		if (isset($this->request->post['geo_zone_shipping_sort_order'])) {
+			$data['geo_zone_shipping_sort_order'] = $this->request->post['geo_zone_shipping_sort_order'];
+		} else if($this->config->has('geo_zone_shipping_sort_order')){
+			$data['geo_zone_shipping_sort_order'] = (int)$this->config->get('geo_zone_shipping_sort_order');
 		} else {
-			$data['shipping_geo_zone_shipping_sort_order'] = 0;
+			$data['geo_zone_shipping_sort_order'] = 0;
 		}
 
-		if (isset($this->request->post['shipping_geo_zone_shipping_methods'])) {
-			$data['shipping_geo_zone_shipping_methods'] = $this->request->post['shipping_geo_zone_shipping_methods'];
-		} else if($this->config->has('shipping_geo_zone_shipping_methods')){
-			$data['shipping_geo_zone_shipping_methods'] = $this->config->get('shipping_geo_zone_shipping_methods');
+		if (isset($this->request->post['geo_zone_shipping_methods'])) {
+			$data['geo_zone_shipping_methods'] = $this->request->post['geo_zone_shipping_methods'];
+		} else if($this->config->has('geo_zone_shipping_methods')){
+			$data['geo_zone_shipping_methods'] = $this->config->get('geo_zone_shipping_methods');
 		} else {
-			$data['shipping_geo_zone_shipping_methods'] = array();
+			$data['geo_zone_shipping_methods'] = array();
 		}
 
 
@@ -99,7 +100,7 @@ class ControllerExtensionShippingGeoZoneShipping extends Controller {
 		}
 
 
-		$data['user_token'] = $this->session->data['user_token'];
+		$data['token'] = $this->session->data['token'];
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -113,8 +114,8 @@ class ControllerExtensionShippingGeoZoneShipping extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		if(isset($this->request->post['shipping_geo_zone_shipping_methods'])){
-			$methods = $this->request->post['shipping_geo_zone_shipping_methods'];
+		if(isset($this->request->post['geo_zone_shipping_methods'])){
+			$methods = $this->request->post['geo_zone_shipping_methods'];
 			foreach($methods as $k=>$method){
 				foreach($method['name'] as $lang_key=>$lang_val){
 					if(empty($lang_val) || trim($lang_val) == ""){

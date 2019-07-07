@@ -5,7 +5,7 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 
 		$this->load->language('extension/shipping/geo_zone_shipping');
 
-		$shipping_methods = $this->config->get('shipping_geo_zone_shipping_methods');
+		$shipping_methods = $this->config->get('geo_zone_shipping_methods');
 
 		$cart_total = $this->cart->getSubTotal();
 		$cart_weight = $this->cart->getWeight();
