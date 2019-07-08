@@ -46,7 +46,7 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 							foreach($price_cost as $pcost){
 								$pc = explode(":", $pcost);
 
-								if(empty($pc[1])) continue;
+								if(!isset($pc[1])) continue;
 								
 								$price = $pc[0];
 								$rate = $pc[1];
@@ -67,7 +67,7 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 							foreach($weight_cost as $wcost){
 								$wc = explode(":", $wcost);
 
-								if(empty($wc[1])) continue;
+								if(!isset($wc[1])) continue;
 								
 								$weight = $wc[0];
 								$rate = $wc[1];
@@ -82,6 +82,10 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 							$method_name .= '<!-- (Weight: ' . $cart_weight .') -->';
 						}
 
+						else {
+							// no method found yet? seems something wrong, continue for other methods
+							continue;
+						}
 
 
 						$title = $this->currency->format($this->tax->calculate($method_cost, $method['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);

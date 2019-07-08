@@ -49,7 +49,7 @@ $_['entry_flat_cost_help']		= 'Flat charges for shipping';
 
 $_['entry_price_help']		= 'Cart total needed before this shipping method becomes available. Leave empty or 0 to make it available for any cart total.';
 $_['entry_price_cost_help1']	= '50:10.00,70:12.00,100:15.00';
-$_['entry_price_cost_help2']	= 'Example 5:10.00,7:12.00,10:15.00 Which means upto cart total of 50 the shipping cost will be 10, from 50 to 70 the shipping cost will be 12 and for cart total over 100 the shipping cost will be 15';
+$_['entry_price_cost_help2']	= 'Example 50:10.00,70:12.00,100:15.00 Which means upto cart total of 50 the shipping cost will be 10, from 50 to 70 the shipping cost will be 12 and for cart total over 100 the shipping cost will be 15';
 
 $_['entry_weight_help']		= 'Weight total needed before this shipping method becomes available. Leave empty or 0 to make it available for any weight.';
 $_['entry_weight_cost_help1']	= '5:10.00,7:12.00,10:15.00';
