@@ -58,7 +58,7 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 							}
 
 							// just for debugging purpose
-							$method_name .= '<!-- (Cart Total: ' . $cart_total .') -->';
+							// $method_name .= '<!-- (Cart Total: ' . $cart_total .') -->';
 						}
 
 
@@ -79,7 +79,7 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 							}
 
 							// just for debugging purpose
-							$method_name .= '<!-- (Weight: ' . $cart_weight .') -->';
+							// $method_name .= '<!-- (Weight: ' . $cart_weight .') -->';
 						}
 
 						else {
