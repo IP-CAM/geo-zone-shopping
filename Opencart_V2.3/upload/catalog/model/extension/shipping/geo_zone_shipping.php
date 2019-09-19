@@ -12,7 +12,7 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 
 		$quote_data = array();
 
-		foreach($shipping_methods as $method){
+		foreach($shipping_methods as $key => $method){
 
 			// if method is enable
 			if($method['status']){
@@ -33,7 +33,7 @@ class ModelExtensionShippingGeoZoneShipping extends Model {
 
 					if($status){
 						$method_name = $method['name'][$this->config->get('config_language_id')];
-						$method_code = strtolower(preg_replace('/[^\da-z]/i', '', $method_name));
+						$method_code = $key; //strtolower(preg_replace('/[^\da-z]/i', '', $method_name));
 						$method_cost = 0;
 
 						if($method['cost_type'] == 'flat'){
